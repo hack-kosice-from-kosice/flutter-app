@@ -50,7 +50,66 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final itemsList = List<String>.generate(10, (n) => "List item ${n}");
+  //int _counter = 0;
+
+  ListView generateItemsList() {
+    return ListView.builder(
+      itemCount: itemsList.length,
+      itemBuilder: (context, index) {
+        return Dismissible(
+          key: Key(itemsList[index]),
+          background: slideRightBackground(),
+          secondaryBackground: slideLeftBackground(),
+          child: InkWell(
+              onTap: () {
+                print("${itemsList[index]} clicked");
+              },
+              child: ListTile(title: Text('${itemsList[index]}'))),
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.endToStart) {
+              final bool res = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Text(
+                          "Are you sure you want to delete ${itemsList[index]}?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onPressed: () {
+                            // TODO: Delete the item from DB etc..
+                            setState(() {
+                              itemsList.removeAt(index);
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  });
+              return res;
+            } else {
+              itemsList.removeAt(index);
+              return true;
+            }
+          },
+        );
+      },
+    );
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -66,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
+    // by the _incr ementCounter method above.
     //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
@@ -77,7 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: generateItemsList(),
+      /*Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -106,12 +166,70 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-      ),
+      ),*/
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Widget slideRightBackground() {
+    return Container(
+      color: Colors.green,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            Text(
+              "Awesome!",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+    );
+  }
+
+  Widget slideLeftBackground() {
+    return Container(
+      color: Colors.red,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            Text(
+              " Maybe tomorrow...",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
+      ),
     );
   }
 }
