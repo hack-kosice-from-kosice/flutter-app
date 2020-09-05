@@ -5,16 +5,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class SkillsPage extends StatefulWidget {
-  SkillsPage({Key key, this.title}) : super(key: key);
+class SkillPage extends StatefulWidget {
+  SkillPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _SkillsPageState createState() => _SkillsPageState();
+  _SkillPageState createState() => _SkillPageState();
 }
 
-class _SkillsPageState extends State<SkillsPage> {
+class _SkillPageState extends State<SkillPage> {
 
   var client = new http.Client();
 
