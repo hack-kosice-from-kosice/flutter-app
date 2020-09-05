@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'data.dart';
+import 'package:flutter/services.dart';
+import 'package:sleep_it_app/skills.dart';
+import 'data/data.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,6 +12,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // set transparent top bar
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent
+    ));
+
     return MaterialApp(
       title: 'sleepIt App',
       theme: ThemeData(
@@ -59,27 +66,25 @@ class _MyHomePageState extends State<MyHomePage> {
     int index = 0;
     return ListView.builder(
       itemCount: itemsList.length,
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(0),
       itemBuilder: (context, index) {
         return Dismissible(
           key: Key(itemsList[index].name),
           background: slideRightBackground(),
           secondaryBackground: slideLeftBackground(),
-        child: new Container(
+        child: new Container(padding: const EdgeInsets.all(5),
         decoration: index % 2 == 0 ?
-        new BoxDecoration(color: const Color(0xFFb0e0e6)) :
-        new BoxDecoration(
-        color: const Color(0xFF7ec0ee)
-        ),
+        new BoxDecoration(color: Colors.grey.shade300) :
+        new BoxDecoration(color: Colors.grey.shade200),
           child: new Row(
             children: <Widget>[
               new Container(
-                margin: new EdgeInsets.all(10.0),
+                margin: new EdgeInsets.symmetric(vertical: 20, horizontal: 2),
                 child: new CachedNetworkImage(
                   imageUrl: itemsList[index].imageURL,
-                  width: 70.0,
-                  height: 70.0,
-                  fit: BoxFit.cover,
+                  width: 150.0,
+                  height: 150.0,
+                  fit: BoxFit.fill,
                 ),
               ),
               new Column(
@@ -87,12 +92,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new Container(
-                    padding: const EdgeInsets.only(bottom: 10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: new Text(
                       itemsList[index].name,
                       style: new TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
+                          fontSize: 20.0,
                           color: Colors.black
                       ),
                     ),
@@ -160,17 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -180,11 +174,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
+      //appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+        //title: Text(widget.title),
+      //),
       body: generateItemsList(),
       /*Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -216,11 +210,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),*/
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -235,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 20,
             ),
             Icon(
-              Icons.edit,
+              Icons.auto_awesome,
               color: Colors.white,
             ),
             Text(
