@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'data.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,22 +52,69 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final itemsList = List<String>.generate(10, (n) => "List item ${n}");
-  //int _counter = 0;
+  final itemsList = dailyTasks.toList();
+  int _counter = 0;
 
   ListView generateItemsList() {
+    int index = 0;
     return ListView.builder(
       itemCount: itemsList.length,
+      padding: const EdgeInsets.all(10.0),
       itemBuilder: (context, index) {
         return Dismissible(
-          key: Key(itemsList[index]),
+          key: Key(itemsList[index].name),
           background: slideRightBackground(),
           secondaryBackground: slideLeftBackground(),
-          child: InkWell(
-              onTap: () {
-                print("${itemsList[index]} clicked");
-              },
-              child: ListTile(title: Text('${itemsList[index]}'))),
+        child: new Container(
+        decoration: index % 2 == 0 ?
+        new BoxDecoration(color: const Color(0xFFb0e0e6)) :
+        new BoxDecoration(
+        color: const Color(0xFF7ec0ee)
+        ),
+          child: new Row(
+            children: <Widget>[
+              new Container(
+                margin: new EdgeInsets.all(10.0),
+                child: new CachedNetworkImage(
+                  imageUrl: itemsList[index].imageURL,
+                  width: 70.0,
+                  height: 70.0,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Container(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: new Text(
+                      itemsList[index].name,
+                      style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
+                          color: Colors.black
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: new Text(
+                      itemsList[index].description,
+                      style: new TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 10.0,
+                          color: Colors.black
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+
+
           confirmDismiss: (direction) async {
             if (direction == DismissDirection.endToStart) {
               final bool res = await showDialog(
@@ -73,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       content: Text(
-                          "Are you sure you want to delete ${itemsList[index]}?"),
+                          "Sure you won't do ${itemsList[index].name} today?"),
                       actions: <Widget>[
                         FlatButton(
                           child: Text(
