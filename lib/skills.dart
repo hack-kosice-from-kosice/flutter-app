@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'data/Skill.dart';
 import 'data/data.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -16,22 +17,24 @@ class SkillPage extends StatefulWidget {
 
 class _SkillPageState extends State<SkillPage> {
 
-  var client = new http.Client();
-
   final itemsList = skills.toList();
 
+  Future<List<Skill>> getSkills() {
+    /*return await http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills')
+        .then((response) {
+      return (json.decode(response.body) as List).map((i) => Skill.fromJson(i)).toList();
+    });*/
+    http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills')
+      .then((response) {
+        final skillsList = json.decode(response.body).cast<Map<String, dynamic>>()["skills"];
+        return skillsList.map<Skill>((json) => Skill.fromJson(json)).toList();
+      });
+  }
+
   ListView generateItemsList() {
-    try {
-      client.read('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills')
-          //.then((value) => print("HELLO" + value.toString()), onError: (error) => print(error));
-    .then((response) {
-    print(response);
-    });
-    } catch (_) {
-      print("catch HERE HERE HERE");
-    } finally {
-      client.close();
-    }
+
+    //Future<List<Skill>> skills = getSkills();
+
     int index = 0;
     return ListView.builder(
       itemCount: itemsList.length,
