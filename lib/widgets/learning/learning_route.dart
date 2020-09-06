@@ -9,7 +9,8 @@ import 'package:swipeable_card/swipeable_card.dart';
 import 'learning_card.dart';
 
 class LearningRoute extends StatefulWidget {
-  const LearningRoute({Key key}) : super(key: key);
+  final int skillId;
+  const LearningRoute({Key key, @required this.skillId}) : super(key: key);
 
   @override
   _LearningRouteState createState() => _LearningRouteState();
@@ -29,7 +30,7 @@ class _LearningRouteState extends State<LearningRoute> {
   @override
   FutureBuilder build(BuildContext context) {
 
-    Future<List<LearnCard>> cards = getLearnCardsForSkill(1); // TODO: get skill with "ID = 1" for now
+    Future<List<LearnCard>> cards = getLearnCardsForSkill(this.widget.skillId);
     SwipeableWidgetController _cardController = SwipeableWidgetController();
     
     return FutureBuilder<List<LearnCard>>(
@@ -59,15 +60,15 @@ class _LearningRouteState extends State<LearningRoute> {
                         text: snapshot.data.elementAt(currentCardIndex + 1).description),
                   ),
                   ],
-                  onLeftSwipe: () => swipeLeft(),
-                  onRightSwipe: () => swipeRight(),
+                  onLeftSwipe: () => swipe(snapshot.data.length),
+                  onRightSwipe: () => swipe(snapshot.data.length),
                 )
                 else
                 // if the deck is complete, add a button to reset deck
                 Center(
                 child: FlatButton(
                 child: Text("Reset Cards"),
-                onPressed: () => setState(() => currentCardIndex = 0),
+                onPressed: () => Navigator.pop(context),
                 ),
                 ),
               ],
@@ -80,33 +81,18 @@ class _LearningRouteState extends State<LearningRoute> {
     );
   }
 
-  void swipeLeft() {
-    print("left");
-    setState(() {
-      currentCardIndex++;
-    });
+  void swipe(int length) {
+    if(currentCardIndex < length - 1) {
+      setState(() {
+        currentCardIndex++;
+      });
+    }
+    else{
+      setState(() {
+        Navigator.pop(context);
+      });
+    }
   }
 
-  void swipeRight() {
-    print("right");
-    setState(() {
-      currentCardIndex++;
-    });
-  }
 
- /* Widget cardControllerRow(SwipeableWidgetController cardController) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        FlatButton(
-          child: Text("Left"),
-          onPressed: () => cardController.triggerSwipeLeft(),
-        ),
-        FlatButton(
-          child: Text("Right"),
-          onPressed: () => cardController.triggerSwipeRight(),
-        ),
-      ],
-    );
-  } */
 }

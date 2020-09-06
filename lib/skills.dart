@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sleep_it_app/widgets/learning/learning_route.dart';
 
 import 'data/Skill.dart';
 
@@ -43,7 +44,12 @@ class _SkillPageState extends State<SkillPage> {
             padding: const EdgeInsets.all(5),
             child:   new InkWell(
               onTap: () {
-                // TODO: Jump to skill
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                    builder: (context) => LearningRoute(skillId: index + 1),
+                ),
+                );
               },
               child: new Container(
                 decoration: index % 2 == 0 ?
@@ -121,3 +127,5 @@ class _SkillPageState extends State<SkillPage> {
 
 
 }
+
+
