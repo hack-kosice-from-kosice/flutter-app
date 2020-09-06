@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_fluid_slider/flutter_fluid_slider.dart';
+
+import '../../main.dart';
+import 'package:http/http.dart' as http;
 
 class DailyForm extends StatefulWidget {
   @override
@@ -26,7 +31,9 @@ class DailyFormState extends State<DailyForm> {
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
-    return Form(
+    return Scaffold(
+      body :
+      Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,10 +43,18 @@ class DailyFormState extends State<DailyForm> {
           ),
           Column(
             children: [
+              Text('Welcome back!',
+                style: TextStyle(
+                  fontSize: 32.0,
+                  fontWeight: FontWeight.w900,
+                ),),
+              new Container(
+                height: 50.0,
+              ),
               Text('How would you rate your sleep?',
                 style: TextStyle(
                   fontSize: 22.0,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w500,
                 ),),
               FluidSlider(
                 value: _sleepQuality,
@@ -62,7 +77,7 @@ class DailyFormState extends State<DailyForm> {
               Text('Do you feel rested?',
                 style: TextStyle(
                   fontSize: 22.0,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w500,
                 ),),
               FluidSlider(
                 value: _relaxedQuality,
@@ -84,7 +99,7 @@ class DailyFormState extends State<DailyForm> {
                 Text('Are you pain free?',
           style: TextStyle(
                 fontSize: 22.0,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w500,
           ),),
                 FluidSlider(
                 value: _bodyQuality,
@@ -110,9 +125,15 @@ class DailyFormState extends State<DailyForm> {
                   // Validate returns true if the form is valid, or false
                   // otherwise.
                   if (_formKey.currentState.validate()) {
-                    // If the form is valid, display a Snackbar.
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('Processing Data')));
+                    double finalStats = (_sleepQuality + _bodyQuality + _relaxedQuality);
+                    print(finalStats);
+                    sendSleepingStats(1, finalStats);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ),
+                    );
                   }
                 },
 
@@ -125,6 +146,19 @@ class DailyFormState extends State<DailyForm> {
           ),
         ],
       ),
+    ),
     );
   }
+}
+
+Future<http.Response> sendSleepingStats(int userId, double value) {
+  return http.post(
+    'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/' + userId.toString() + '/sleeping-stats',
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'value': value.toString(),
+    }),
+  );
 }
