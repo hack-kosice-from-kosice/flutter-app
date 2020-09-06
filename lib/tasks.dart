@@ -31,132 +31,139 @@ class _TaskPageState extends State<TaskPage> {
   final _random = new Random();
 
   Future<List<DailyTask>> getDailyTasks() {
-    return http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/123/daily-tasks')
+    return http
+        .get(
+            'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/123/daily-tasks')
         .then((response) {
-      return ((json.decode(response.body) as Map)['dailyTasks'] as List).map((e) => DailyTask.fromJson(e)).toList();
+      return ((json.decode(response.body) as Map)['dailyTasks'] as List)
+          .map((e) => DailyTask.fromJson(e))
+          .toList();
     });
   }
 
   FutureBuilder generateItemsList() {
-
     Future<List<DailyTask>> dailyTasks = getDailyTasks();
     int index = 0; // ignore: unused_local_variable
     return FutureBuilder<List<DailyTask>>(
-        future: dailyTasks, builder: (context, snapshot) {
-          if(snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData ?
-          ListView.builder(
-            itemCount: snapshot.data.length,
-            padding: const EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              return Dismissible(
-                key: Key(snapshot.data[index].name),
-                background: slideRightBackground(),
-                secondaryBackground: slideLeftBackground(),
-                child: new Container(padding: const EdgeInsets.all(5),
-                  decoration: index % 2 == 0 ?
-                  new BoxDecoration(color: Colors.grey.shade300) :
-                  new BoxDecoration(color: Colors.grey.shade200),
-                  child: new InkWell(
-                    onTap: () {
-              Navigator.push(
-              context,
-              MaterialPageRoute(
-              builder: (context) => LearningRoute(skillId: snapshot.data[index].skillId),
-              ),
-              );
-              },
-                child: new Row(
-                    children: <Widget>[
-                      new Container(
-                        margin: new EdgeInsets.symmetric(vertical: 20, horizontal: 2),
-                        child: new CachedNetworkImage(
-                          imageUrl: snapshot.data[index].imageURL,
-                          height: 150.0,
-                          fit: BoxFit.fill,
+      future: dailyTasks,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data.length,
+                padding: const EdgeInsets.all(0),
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                    key: Key(snapshot.data[index].name),
+                    background: slideRightBackground(),
+                    secondaryBackground: slideLeftBackground(),
+                    child: new Tooltip(
+                      message: 'Swipe right to complete the task',
+                      child: new Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: index % 2 == 0
+                            ? new BoxDecoration(color: Colors.grey.shade300)
+                            : new BoxDecoration(color: Colors.grey.shade200),
+                        child: new InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LearningRoute(
+                                    skillId: snapshot.data[index].skillId),
+                              ),
+                            );
+                          },
+                          child: new Row(
+                            children: <Widget>[
+                              new Container(
+                                margin: new EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 2),
+                                child: new CachedNetworkImage(
+                                  imageUrl: snapshot.data[index].imageURL,
+                                  height: 150.0,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              new Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0),
+                                    child: new Text(
+                                      snapshot.data[index].name,
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15.0,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  new Container(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 10.0),
+                                    child: new Text(
+                                      snapshot.data[index].description,
+                                      style: new TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 10.0,
+                                          color: Colors.black),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: new Text(
-                              snapshot.data[index].name,
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.0,
-                                  color: Colors.black
-                              ),
-                            ),
-                          ),
-                          new Container(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: new Text(
-                              snapshot.data[index].description,
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 10.0,
-                                  color: Colors.black
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                ),
-
-
-                confirmDismiss: (direction) async {
-                  if (direction == DismissDirection.endToStart) {
-                    final bool res = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Text(
-                                "Sure you won't do \"${snapshot.data[index].name}\" today?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text(
-                                  "Delete",
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                                onPressed: () {
-                                  sendTaskRequest(1, index, false);
-                                  setState(() {
-                                    snapshot.data.removeAt(index);
-                                  });
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        });
-                    return res;
-                  } else {
-                    snapshot.data.removeAt(index);
-                    sendTaskRequest(1, index, true);
-                    return true;
-                  }
+                    ),
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+                        final bool res = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Text(
+                                    "Sure you won't do \"${snapshot.data[index].name}\" today?"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text(
+                                      "Delete",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      sendTaskRequest(1, index, false);
+                                      setState(() {
+                                        snapshot.data.removeAt(index);
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                        return res;
+                      } else {
+                        snapshot.data.removeAt(index);
+                        sendTaskRequest(1, index, true);
+                        return true;
+                      }
+                    },
+                  );
                 },
-              );
-            },
-          )
-              :
-          Center(child: CircularProgressIndicator());
-    },
+              )
+            : Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -269,14 +276,16 @@ class _TaskPageState extends State<TaskPage> {
 
 Future<http.Response> sendTaskRequest(int userId, int taskId, bool done) {
   String returnCode;
-  if(done){
+  if (done) {
     returnCode = 'MARK_AS_ACHIEVED';
-  }
-  else{
+  } else {
     returnCode = 'MARK_AS_REJECTED';
   }
   return http.post(
-    'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/' + userId.toString() + '/daily-tasks/' + taskId.toString(),
+    'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/' +
+        userId.toString() +
+        '/daily-tasks/' +
+        taskId.toString(),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
