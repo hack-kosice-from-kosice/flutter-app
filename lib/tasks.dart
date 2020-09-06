@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sleep_it_app/widgets/learning/learning_route.dart';
 
 import 'data/DailyTask.dart';
 import 'data/data.dart';
@@ -56,7 +57,16 @@ class _TaskPageState extends State<TaskPage> {
                   decoration: index % 2 == 0 ?
                   new BoxDecoration(color: Colors.grey.shade300) :
                   new BoxDecoration(color: Colors.grey.shade200),
-                  child: new Row(
+                  child: new InkWell(
+                    onTap: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (context) => LearningRoute(skillId: snapshot.data[index].skillId),
+              ),
+              );
+              },
+                child: new Row(
                     children: <Widget>[
                       new Container(
                         margin: new EdgeInsets.symmetric(vertical: 20, horizontal: 2),
@@ -96,6 +106,7 @@ class _TaskPageState extends State<TaskPage> {
                       )
                     ],
                   ),
+                ),
                 ),
 
 

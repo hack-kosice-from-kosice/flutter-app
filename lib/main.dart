@@ -75,7 +75,7 @@ class _HomeState extends State<HomePage> {
             title: new Text('Habits'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.build),
+              icon: Icon(Icons.assessment),
               title: Text('Statistics')
           )
         ],
