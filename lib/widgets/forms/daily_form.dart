@@ -27,89 +27,94 @@ class DailyFormState extends State<DailyForm> {
   double _relaxedQuality = 3;
   double _bodyQuality = 3;
 
-
   @override
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Scaffold(
-      body :
-      Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Container(
-            height: 50.0,
-          ),
-          Column(
-            children: [
-              Text('Welcome back!',
-                style: TextStyle(
-                  fontSize: 32.0,
-                  fontWeight: FontWeight.w900,
-                ),),
-              new Container(
-                height: 50.0,
-              ),
-              Text('How would you rate your sleep?',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w500,
-                ),),
-              FluidSlider(
-                value: _sleepQuality,
-                onChanged: (double newValue) {
-                  setState(() {
-                    _sleepQuality = newValue;
-                  });
-                },
-                min: 1,
-                max: 5,
-              ),
-              new Container(
-                height: 50.0,
-              )
-            ],
-          ),
-
-          Column(
-            children: [
-              Text('Do you feel rested?',
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w500,
-                ),),
-              FluidSlider(
-                value: _relaxedQuality,
-                onChanged: (double newValue) {
-                  setState(() {
-                    _relaxedQuality = newValue;
-                  });
-                },
-                min: 1,
-                max: 5,
-              ),
-              new Container(
-                height: 50.0,
-              )
-            ],
-          ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Container(
+              height: 50.0,
+            ),
             Column(
               children: [
-                Text('Are you pain free?',
-          style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w500,
-          ),),
+                Text(
+                  'Welcome back!',
+                  style: TextStyle(
+                    fontSize: 32.0,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                new Container(
+                  height: 50.0,
+                ),
+                Text(
+                  'How would you rate your sleep?',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 FluidSlider(
-                value: _bodyQuality,
-                onChanged: (double newValue) {
-                setState(() {
-                _bodyQuality = newValue;
-                });
-                },
-                min: 1,
-                max: 5,
+                  value: _sleepQuality,
+                  onChanged: (double newValue) {
+                    setState(() {
+                      _sleepQuality = newValue;
+                    });
+                  },
+                  min: 1,
+                  max: 5,
+                ),
+                new Container(
+                  height: 50.0,
+                )
+              ],
+            ),
+            Column(
+              children: [
+                Text(
+                  'Do you feel rested?',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                FluidSlider(
+                  value: _relaxedQuality,
+                  onChanged: (double newValue) {
+                    setState(() {
+                      _relaxedQuality = newValue;
+                    });
+                  },
+                  min: 1,
+                  max: 5,
+                ),
+                new Container(
+                  height: 50.0,
+                )
+              ],
+            ),
+            Column(
+              children: [
+                Text(
+                  'Are you pain free?',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                FluidSlider(
+                  value: _bodyQuality,
+                  onChanged: (double newValue) {
+                    setState(() {
+                      _bodyQuality = newValue;
+                    });
+                  },
+                  min: 1,
+                  max: 5,
                 ),
                 new Container(
                   height: 50.0,
@@ -117,43 +122,48 @@ class DailyFormState extends State<DailyForm> {
               ],
             ),
             Center(
-            child: new Container(
-              width: double.infinity,
-              child: RaisedButton(
+              child: new Container(
+                width: double.infinity,
+                child: RaisedButton(
                   color: Colors.grey,
-                onPressed: () {
-                  // Validate returns true if the form is valid, or false
-                  // otherwise.
-                  if (_formKey.currentState.validate()) {
-                    double finalStats = (_sleepQuality + _bodyQuality + _relaxedQuality);
-                    print(finalStats);
-                    sendSleepingStats(1, finalStats);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
-                      ),
-                    );
-                  }
-                },
-
-                child: Text('Submit', style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w900,
-                ),),
+                  onPressed: () {
+                    // Validate returns true if the form is valid, or false
+                    // otherwise.
+                    if (_formKey.currentState.validate()) {
+                      double finalStats =
+                          (_sleepQuality + _bodyQuality + _relaxedQuality);
+                      print(finalStats);
+                      sendSleepingStats(1, finalStats);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ),
+                      );
+                    }
+                  },
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
   }
 }
 
 Future<http.Response> sendSleepingStats(int userId, double value) {
   return http.post(
-    'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/' + userId.toString() + '/sleeping-stats',
+    'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/' +
+        userId.toString() +
+        '/sleeping-stats',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

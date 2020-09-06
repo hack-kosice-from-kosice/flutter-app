@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'data/data.dart';
 
 class PlaceholderWidget extends StatelessWidget {
-
   PlaceholderWidget();
 
   @override

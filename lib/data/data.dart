@@ -1,4 +1,3 @@
-
 import '../stats.dart';
 
 var awesomeQuotes = [
@@ -12,7 +11,6 @@ var awesomeQuotes = [
   "As expected...",
   "Not a doubt!"
 ];
-
 
 final sleepingStatisticsData = [
   new TimeSeriesWithIntValue(new DateTime(2020, 9, 4), 3),
