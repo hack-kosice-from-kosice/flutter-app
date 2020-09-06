@@ -117,7 +117,7 @@ class _TaskPageState extends State<TaskPage> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             content: Text(
-                                "Sure you won't do ${snapshot.data[index].name} today?"),
+                                "Sure you won't do \"${snapshot.data[index].name}\" today?"),
                             actions: <Widget>[
                               FlatButton(
                                 child: Text(
