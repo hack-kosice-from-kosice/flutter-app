@@ -1,4 +1,5 @@
 class DailyTask {
+  final int id;
   final String name;
   final int skillId;
   final String amount;
@@ -7,7 +8,8 @@ class DailyTask {
   final String imageURL;
   //Constructor
   const DailyTask(
-      {this.name,
+      {this.id,
+        this.name,
       this.skillId,
       this.amount,
       this.status,
@@ -15,6 +17,7 @@ class DailyTask {
       this.imageURL});
 
   factory DailyTask.fromJson(Map<String, dynamic> json) => DailyTask(
+    id: json['id'],
       name: json['skill']['name'],
       skillId: json['skill']['id'],
       amount: json['amount'],

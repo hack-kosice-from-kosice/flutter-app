@@ -37,6 +37,7 @@ class _TaskPageState extends State<TaskPage> {
         .then((response) {
       return ((json.decode(response.body) as Map)['dailyTasks'] as List)
           .map((e) => DailyTask.fromJson(e))
+          .where((element) => (element.status == 'ACTIVE'))
           .toList();
     });
   }
@@ -49,7 +50,15 @@ class _TaskPageState extends State<TaskPage> {
       builder: (context, snapshot) {
         if (snapshot.hasError) print(snapshot.error);
         return snapshot.hasData
-            ? ListView.builder(
+            ? snapshot.data.length == 0 ?
+        Text(
+          'All Challenges Completed!',
+          style: TextStyle(
+            fontSize: 32.0,
+            fontWeight: FontWeight.w200,
+          ),
+        ):
+        ListView.builder(
                 itemCount: snapshot.data.length,
                 padding: const EdgeInsets.all(0),
                 itemBuilder: (context, index) {
@@ -154,8 +163,8 @@ class _TaskPageState extends State<TaskPage> {
                             });
                         return res;
                       } else {
+                        sendTaskRequest(123, snapshot.data[index].id, true);
                         snapshot.data.removeAt(index);
-                        sendTaskRequest(1, index, true);
                         return true;
                       }
                     },
