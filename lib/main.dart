@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sleep_it_app/skills.dart';
+import 'package:sleep_it_app/widgets/forms/daily_form.dart';
 
 import 'stats.dart';
 import 'tasks.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: DailyForm()
     );
   }
 }
