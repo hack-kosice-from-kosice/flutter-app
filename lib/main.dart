@@ -12,12 +12,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     // set transparent top bar
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent
-    ));
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     return MaterialApp(
       title: 'sleepIt App',
@@ -55,7 +55,7 @@ class _HomeState extends State<HomePage> {
   final List<Widget> _children = [
     TaskPage(),
     SkillPage(title: 'My Flutter App'),
-    PlaceholderWidget(Colors.green)
+    PlaceholderWidget()
   ];
 
   @override
@@ -64,7 +64,8 @@ class _HomeState extends State<HomePage> {
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
-        currentIndex: _currentIndex, // this will be set when a new tab is tapped
+        currentIndex: _currentIndex,
+        // this will be set when a new tab is tapped
         items: [
           BottomNavigationBarItem(
             icon: new Icon(Icons.alarm_on),
@@ -75,20 +76,15 @@ class _HomeState extends State<HomePage> {
             title: new Text('Habits'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.build),
-              title: Text('Statistics')
-          )
+              icon: Icon(Icons.assessment), title: Text('Statistics'))
         ],
       ),
     );
   }
+
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
 }
-
-
-
-
