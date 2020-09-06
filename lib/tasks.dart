@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'data/data.dart';
+import 'package:http/http.dart' as http;
 
 class TaskPage extends StatefulWidget {
   TaskPage({Key key, this.title}) : super(key: key);
@@ -106,7 +109,7 @@ class _TaskPageState extends State<TaskPage> {
                             style: TextStyle(color: Colors.red),
                           ),
                           onPressed: () {
-                            // TODO: Delete the item from DB etc..
+                            sendTaskRequest(1, index, false);
                             setState(() {
                               itemsList.removeAt(index);
                             });
@@ -119,6 +122,7 @@ class _TaskPageState extends State<TaskPage> {
               return res;
             } else {
               itemsList.removeAt(index);
+              sendTaskRequest(1, index, true);
               return true;
             }
           },
@@ -232,4 +236,23 @@ class _TaskPageState extends State<TaskPage> {
       ),
     );
   }
+}
+
+Future<http.Response> sendTaskRequest(int userId, int taskId, bool done) {
+  String returnCode;
+  if(done){
+    returnCode = 'MARK_AS_ACHIEVED';
+  }
+  else{
+    returnCode = 'MARK_AS_REJECTED';
+  }
+  return http.post(
+    'http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/users/' + userId.toString() + '/daily-tasks/' + taskId.toString(),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'action': returnCode,
+    }),
+  );
 }
