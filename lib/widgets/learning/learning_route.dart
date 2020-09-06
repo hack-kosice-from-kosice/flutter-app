@@ -1,4 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:sleep_it_app/data/LearnCard.dart';
 import 'package:swipeable_card/swipeable_card.dart';
 
 import 'learning_card.dart';
@@ -11,50 +16,67 @@ class LearningRoute extends StatefulWidget {
 }
 
 class _LearningRouteState extends State<LearningRoute> {
-  final List<LearningCard> cards = [
-    LearningCard(color: Colors.blue, text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."),
-    LearningCard(color: Colors.blue, text: "It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."),
-    LearningCard(color: Colors.blue, text: "This is the last card."),
-  ];
+
+  Future<List<LearnCard>> getLearnCardsForSkill(int skillId) {
+    return http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills/$skillId')
+        .then((response) {
+      return ((json.decode(response.body) as Map)['descriptions'] as List).map((e) => LearnCard.fromJson(e)).toList();
+    });
+  }
+
   int currentCardIndex = 0;
 
   @override
-  Widget build(BuildContext context) {
+  FutureBuilder build(BuildContext context) {
+
+    Future<List<LearnCard>> cards = getLearnCardsForSkill(1); // TODO: get skill with "ID = 1" for now
     SwipeableWidgetController _cardController = SwipeableWidgetController();
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            if (currentCardIndex < cards.length)
-              SwipeableWidget(
-                cardController: _cardController,
-                animationDuration: 500,
-                horizontalThreshold: 0.85,
-                child: cards[currentCardIndex],
-                nextCards: <Widget>[
+    
+    return FutureBuilder<List<LearnCard>>(
+      future: cards, builder: (context, snapshot) {
+        return snapshot.hasData ?
+          Scaffold(
+            body: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                if (currentCardIndex < snapshot.data.length)
+                SwipeableWidget(
+                  cardController: _cardController,
+                  animationDuration: 500,
+                  horizontalThreshold: 0.85,
+                  child:
+                    LearningCard(color: snapshot.data.elementAt(currentCardIndex).color,
+                      text: snapshot.data.elementAt(currentCardIndex).description),
+                  nextCards: <Widget>[
                   // show next card
                   // if there are no next cards, show nothing
-                  if (!(currentCardIndex + 1 >= cards.length))
-                    Align(
-                      alignment: Alignment.center,
-                      child: cards[currentCardIndex + 1],
-                    ),
-                ],
-                onLeftSwipe: () => swipeLeft(),
-                onRightSwipe: () => swipeRight(),
-              )
-            else
-              // if the deck is complete, add a button to reset deck
-              Center(
+                  if (!(currentCardIndex + 1 >= snapshot.data.length))
+                  Align(
+                    alignment: Alignment.center,
+                    child:
+                    LearningCard(color: snapshot.data.elementAt(currentCardIndex).color,
+                        text: snapshot.data.elementAt(currentCardIndex + 1).description),
+                  ),
+                  ],
+                  onLeftSwipe: () => swipeLeft(),
+                  onRightSwipe: () => swipeRight(),
+                )
+                else
+                // if the deck is complete, add a button to reset deck
+                Center(
                 child: FlatButton(
-                  child: Text("Reset Cards"),
-                  onPressed: () => setState(() => currentCardIndex = 0),
+                child: Text("Reset Cards"),
+                onPressed: () => setState(() => currentCardIndex = 0),
                 ),
-              ),
-          ],
-        ),
-      ),
+                ),
+              ],
+            ),
+            ),
+          )
+            :
+          Center(child: CircularProgressIndicator());
+    },
     );
   }
 
