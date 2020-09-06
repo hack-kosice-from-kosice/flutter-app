@@ -62,7 +62,6 @@ class _TaskPageState extends State<TaskPage> {
                         margin: new EdgeInsets.symmetric(vertical: 20, horizontal: 2),
                         child: new CachedNetworkImage(
                           imageUrl: snapshot.data[index].imageURL,
-                          width: 150.0,
                           height: 150.0,
                           fit: BoxFit.fill,
                         ),
@@ -77,7 +76,7 @@ class _TaskPageState extends State<TaskPage> {
                               snapshot.data[index].name,
                               style: new TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
+                                  fontSize: 15.0,
                                   color: Colors.black
                               ),
                             ),
