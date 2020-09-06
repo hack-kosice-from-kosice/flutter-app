@@ -30,7 +30,7 @@ class _SkillPageState extends State<SkillPage> {
 
     Future<List<Skill>> skills = getSkills();
 
-    int index = 0;
+    int index = 0; // ignore: unused_local_variable
     return FutureBuilder<List<Skill>>(
       future: skills, builder: (context, snapshot) {
       if (snapshot.hasError) print(snapshot.error);

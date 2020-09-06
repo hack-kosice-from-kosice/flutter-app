@@ -39,7 +39,7 @@ class _TaskPageState extends State<TaskPage> {
   FutureBuilder generateItemsList() {
 
     Future<List<DailyTask>> dailyTasks = getDailyTasks();
-    int index = 0;
+    int index = 0; // ignore: unused_local_variable
     return FutureBuilder<List<DailyTask>>(
         future: dailyTasks, builder: (context, snapshot) {
           if(snapshot.hasError) print(snapshot.error);
