@@ -10,7 +10,7 @@ class PlaceholderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
       AnimatedPositioned(
-        top: 15,
+        top: 25,
         left: 110,
         // use top,bottom,left and right property to set the location and Transform.rotate to rotate the widget if needed
         child: Text("Sleep quality",
