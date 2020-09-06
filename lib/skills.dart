@@ -17,85 +17,86 @@ class SkillPage extends StatefulWidget {
 
 class _SkillPageState extends State<SkillPage> {
 
-  final itemsList = skills.toList();
-
   Future<List<Skill>> getSkills() {
-    /*return await http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills')
+    return http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills')
         .then((response) {
-      return (json.decode(response.body) as List).map((i) => Skill.fromJson(i)).toList();
-    });*/
-    http.get('http://ec2-3-122-178-28.eu-central-1.compute.amazonaws.com:8080/skills')
-      .then((response) {
-        final skillsList = json.decode(response.body).cast<Map<String, dynamic>>()["skills"];
-        return skillsList.map<Skill>((json) => Skill.fromJson(json)).toList();
-      });
+      return ((json.decode(response.body) as Map)['skills'] as List).map((e) => Skill.fromJson(e)).toList();
+    });
   }
 
-  ListView generateItemsList() {
+  FutureBuilder generateItemsList() {
 
-    //Future<List<Skill>> skills = getSkills();
+    Future<List<Skill>> skills = getSkills();
 
     int index = 0;
-    return ListView.builder(
-      itemCount: itemsList.length,
-      padding: const EdgeInsets.all(6),
-      itemBuilder: (context, index) {
-        return Container(
-          key: Key(itemsList[index].name),
-          padding: const EdgeInsets.all(5),
-          child:   new InkWell(
-            onTap: () {
-              // TODO: Jump to skill
-            },
-            child: new Container(
-            decoration: index % 2 == 0 ?
-            new BoxDecoration(color: Colors.grey.shade300) :
-            new BoxDecoration(color: Colors.grey.shade200),
-              child: new Row(
-                children: <Widget>[
-                  new Container(
-                    margin: new EdgeInsets.all(10.0),
-                    child: new CachedNetworkImage(
-                      imageUrl: itemsList[index].imageURL,
-                      width: 70.0,
-                      height: 70.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Container(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: new Text(
-                          itemsList[index].name,
-                          style: new TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
-                              color: Colors.black
-                          ),
-                        ),
+    return FutureBuilder<List<Skill>>(
+      future: skills, builder: (context, snapshot) {
+      if (snapshot.hasError) print(snapshot.error);
+      return snapshot.hasData ?
+       ListView.builder(
+        itemCount: snapshot.data.length,
+        padding: const EdgeInsets.all(6),
+        itemBuilder: (context, index) {
+          return Container(
+            key: Key(snapshot.data[index].name),
+            padding: const EdgeInsets.all(5),
+            child:   new InkWell(
+              onTap: () {
+                // TODO: Jump to skill
+              },
+              child: new Container(
+                decoration: index % 2 == 0 ?
+                new BoxDecoration(color: Colors.grey.shade300) :
+                new BoxDecoration(color: Colors.grey.shade200),
+                child: new Row(
+                  children: <Widget>[
+                    new Container(
+                      margin: new EdgeInsets.all(10.0),
+                      child: new CachedNetworkImage(
+                        imageUrl: snapshot.data[index].imageURL,
+                        width: 70.0,
+                        height: 70.0,
+                        fit: BoxFit.cover,
                       ),
-                      new Container(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: new Text(
-                          itemsList[index].description,
-                          style: new TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 10.0,
-                              color: Colors.black
+                    ),
+                    new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: new Text(
+                            snapshot.data[index].name,
+                            style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.0,
+                                color: Colors.black
+                            ),
                           ),
                         ),
-                      )
-                    ],
-                  )
-                ],
+                        new Container(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: new Text(
+                            snapshot.data[index].description,
+                            style: new TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10.0,
+                                color: Colors.black
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      )
+          :
+      Center(child: CircularProgressIndicator());
+    },
     );
   }
 
