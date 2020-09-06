@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'data/Skill.dart';
-import 'data/data.dart';
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'data/Skill.dart';
 
 class SkillPage extends StatefulWidget {
   SkillPage({Key key, this.title}) : super(key: key);

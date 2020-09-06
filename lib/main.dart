@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:sleep_it_app/skills.dart';
-import 'data/data.dart';
-import 'tasks.dart';
+
 import 'stats.dart';
+import 'tasks.dart';
 
 void main() {
   runApp(MyApp());

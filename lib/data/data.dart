@@ -1,5 +1,4 @@
 import 'DailyTask.dart';
-import 'Skill.dart';
 var dailyTasks = [
   new DailyTask(
       name: 'Rosa rubiginosa',
