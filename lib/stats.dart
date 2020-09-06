@@ -8,14 +8,28 @@ class PlaceholderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return charts.TimeSeriesChart([
-      new charts.Series<TimeSeriesWithIntValue, DateTime>(
-        id: 'Desktop',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesWithIntValue values, _) => values.time,
-        measureFn: (TimeSeriesWithIntValue values, _) => values.value,
-        data: sleepingStatisticsData,
-      )
+    return Stack(children: <Widget>[
+      AnimatedPositioned(
+        top: 25,
+        left: 110,
+        // use top,bottom,left and right property to set the location and Transform.rotate to rotate the widget if needed
+        child: Text("Sleep quality",
+            style: TextStyle(
+              fontSize: 32.0,
+              fontWeight: FontWeight.w900,
+            )),
+
+        duration: Duration(seconds: 3),
+      ),
+      charts.TimeSeriesChart([
+        new charts.Series<TimeSeriesWithIntValue, DateTime>(
+          id: 'Desktop',
+          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+          domainFn: (TimeSeriesWithIntValue values, _) => values.time,
+          measureFn: (TimeSeriesWithIntValue values, _) => values.value,
+          data: sleepingStatisticsData,
+        )
+      ])
     ]);
   }
 }
