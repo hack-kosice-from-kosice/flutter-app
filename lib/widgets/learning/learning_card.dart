@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class LearningCard extends StatelessWidget {
   const LearningCard({
     Key key,
-    this.color = Colors.indigo,
     this.text = "Card Example",
+    this.color = Colors.lightBlue,
   }) : super(key: key);
   final Color color;
   final String text;
@@ -22,7 +22,7 @@ class LearningCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
         border: Border.all(
           width: 4.0,
-          color: Colors.transparent.withOpacity(0.3),
+          color: Colors.lightBlueAccent,
         ),
       ),
 

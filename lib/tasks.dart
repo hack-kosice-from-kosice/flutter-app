@@ -62,8 +62,8 @@ class _TaskPageState extends State<TaskPage> {
                       child: new Container(
                         padding: const EdgeInsets.all(5),
                         decoration: index % 2 == 0
-                            ? new BoxDecoration(color: Colors.grey.shade300)
-                            : new BoxDecoration(color: Colors.grey.shade200),
+                            ? new BoxDecoration(color: Colors.lightBlueAccent.shade50)
+                            : new BoxDecoration(color: Colors.lightBlue.shade50),
                         child: new InkWell(
                           onTap: () {
                             Navigator.push(

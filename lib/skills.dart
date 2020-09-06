@@ -57,8 +57,8 @@ class _SkillPageState extends State<SkillPage> {
                       },
                       child: new Container(
                         decoration: index % 2 == 0
-                            ? new BoxDecoration(color: Colors.grey.shade300)
-                            : new BoxDecoration(color: Colors.grey.shade200),
+                            ? new BoxDecoration(color: Colors.lightBlueAccent.shade50)
+                            : new BoxDecoration(color: Colors.lightBlue.shade50),
                         child: new Row(
                           children: <Widget>[
                             new Container(
@@ -117,11 +117,7 @@ class _SkillPageState extends State<SkillPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+
       body: generateItemsList(),
     );
   }

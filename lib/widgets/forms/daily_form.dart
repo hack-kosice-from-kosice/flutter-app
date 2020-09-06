@@ -59,6 +59,7 @@ class DailyFormState extends State<DailyForm> {
                   ),
                 ),
                 FluidSlider(
+                  sliderColor: Colors.lightBlue.shade200,
                   value: _sleepQuality,
                   onChanged: (double newValue) {
                     setState(() {
@@ -83,6 +84,7 @@ class DailyFormState extends State<DailyForm> {
                   ),
                 ),
                 FluidSlider(
+                  sliderColor: Colors.lightBlue.shade200,
                   value: _relaxedQuality,
                   onChanged: (double newValue) {
                     setState(() {
@@ -107,6 +109,7 @@ class DailyFormState extends State<DailyForm> {
                   ),
                 ),
                 FluidSlider(
+                  sliderColor: Colors.lightBlue.shade200,
                   value: _bodyQuality,
                   onChanged: (double newValue) {
                     setState(() {
@@ -122,10 +125,15 @@ class DailyFormState extends State<DailyForm> {
               ],
             ),
             Center(
-              child: new Container(
-                width: double.infinity,
+              child:
+              new Container(
+                height: 60,
+                width: double.infinity - 20,
                 child: RaisedButton(
-                  color: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  color: Colors.lightBlue.shade50,
                   onPressed: () {
                     // Validate returns true if the form is valid, or false
                     // otherwise.
@@ -143,15 +151,16 @@ class DailyFormState extends State<DailyForm> {
                     }
                   },
                   child: Text(
-                    'Submit',
+                    'Continue',
                     style: TextStyle(
                       fontSize: 22.0,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
-            ),
+              ),
+
           ],
         ),
       ),
