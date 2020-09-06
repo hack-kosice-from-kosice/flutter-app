@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'data/data.dart';
@@ -21,6 +23,7 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
+  final _random = new Random();
   final itemsList = dailyTasks.toList();
   int _counter = 0;
 
@@ -190,7 +193,7 @@ class _TaskPageState extends State<TaskPage> {
               color: Colors.white,
             ),
             Text(
-              "Awesome!",
+              awesomeQuotes[0 + _random.nextInt(8 - 0)],
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

@@ -90,5 +90,16 @@ var skills = [
       description: 'Rosa gallica Evêque, painted by Redouté',
       imageURL: 'https://image.flaticon.com/icons/png/512/2029/2029313.png'
   )
+];
 
+var awesomeQuotes = [
+  "Awesome!",
+  "You're incredible!",
+  "Keep it up!",
+  "Amazing!",
+  "Marvelous!",
+  "Wow!",
+  "Good job!",
+  "As expected...",
+  "Not a doubt!"
 ];
