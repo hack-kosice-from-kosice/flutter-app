@@ -1,5 +1,5 @@
 class Skill{
-  final String id;
+  final int id;
   final String name;
   final String description;
   final String imageURL;
@@ -14,7 +14,7 @@ class Skill{
   factory Skill.fromJson(Map<String, dynamic> json) => Skill(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
+      description: json['description'] == null ? '' : json['description'],
       imageURL: json['imageUrl']
     );
 

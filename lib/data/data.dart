@@ -59,39 +59,6 @@ var dailyTasks = [
 
 ];
 
-var skills = [
-  new Skill(
-      id: '1',
-      name: 'Water',
-      description: 'The Swedish botanist Carl Linnaeus',
-      imageURL: 'https://media-public.canva.com/MADpjrmJn8k/1/screen.svg'
-  ),
-  new Skill(
-      id: '2',
-      name: 'NoTvOrPcOrSmartphone',
-      description: 'The leaves are borne alternately on the stem',
-      imageURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/No-TV.svg/1200px-No-TV.svg.png'
-  ),
-  new Skill(
-      id: '3',
-      name: 'Exercise',
-      description: 'Subgenus, sometimes incorrectly called Eurosa',
-      imageURL: 'https://media-public.canva.com/MADrPCb9Hik/1/screen.svg'
-  ),
-  new Skill(
-      id: '4',
-      name: 'Sun',
-      description: 'Rose perfumes are made from rose oil',
-      imageURL: 'https://media-public.canva.com/MADZ4yTWnmA/1/screen.svg'
-  ),
-  new Skill(
-      id: '5',
-      name: 'No Coffee',
-      description: 'Rosa gallica Evêque, painted by Redouté',
-      imageURL: 'https://image.flaticon.com/icons/png/512/2029/2029313.png'
-  )
-];
-
 var awesomeQuotes = [
   "Awesome!",
   "You're incredible!",
